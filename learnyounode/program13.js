@@ -1,7 +1,6 @@
 var fs = require('fs')
 var http = require('http')
 var url = require('url')
-var map = require('through2-map')
 
 var server = http.createServer(function(req, res) {
       if (req.method == 'POST') {
@@ -11,15 +10,22 @@ var server = http.createServer(function(req, res) {
 
         var urlObj = url.parse(req.url, true)
 
+
+        res.writeHead(200, { 'Content-Type': 'application/json' })
         console.log(urlObj)
-
-        if(pathname == '/api/parsetime'){
-
-
-
+        var resMap = {}
+        var date = new Date(urlObj.query.iso);
+        if(urlObj.pathname == '/api/parsetime'){
+          resMap.hour = date.getHours()
+          resMap.minute = date.getMinutes()
+          resMap.second = date.getSeconds()
+        }
+        if(urlObj.pathname == '/api/unixtime'){
+          resMap.unixtime =  date.getTime()
         }
 
-
+        var stringifiedJSON = JSON.stringify(resMap)
+        res.end(stringifiedJSON);
       }
       })
 
