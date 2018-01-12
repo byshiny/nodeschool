@@ -5,10 +5,10 @@ var split = require('split');
        .pipe(split())
        .pipe(through2(function (line, _, next) {
          if(count % 2 == 1){
-           this.push(line.toString());
+           this.push(line.toString().toLowerCase() + "\n");
          }
          else{
-           this.push(line.toString().toUpperCase());
+           this.push(line.toString().toUpperCase() + "\n");
          }
          count++;
            next();
